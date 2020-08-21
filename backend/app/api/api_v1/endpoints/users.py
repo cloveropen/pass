@@ -6,11 +6,11 @@ from pydantic.networks import EmailStr
 #from sqlalchemy.orm import Session
 
 from app import schemas
-from app.api import deps
+#from app.api import deps
 #from app.core.config import settings
 #from app.utils import send_new_account_email
-from app.db.base import BaseRepository
-from app.db.usersresp import UsersRepository
+#from app.db.base import BaseRepository
+#from app.db.usersresp import UsersRepository
 
 router = APIRouter()
 
@@ -21,8 +21,8 @@ router = APIRouter()
 async def read_users(self):
     print('获取用户信息---')
     print('--------------')
-    us = UsersRepository()
-    row = await us.get_user_by_username('9999')
+    #us = UsersRepository()
+    #row = await us.get_user_by_username('9999')
 
     #username.get_user_by_username()
     print('获取用户信息完成')

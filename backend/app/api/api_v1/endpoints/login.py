@@ -55,11 +55,11 @@ def test_token():
     """
     return current_user
 '''
-
+'''
 @router.post("/password-recovery/{email}", response_model=schemas.Msg)
 def recover_password(email: str):
     pass
-    ''', db: Session = Depends(deps.get_db)) -> Any:
+    , db: Session = Depends(deps.get_db)) -> Any:
     """
     Password Recovery
     """
@@ -75,12 +75,12 @@ def recover_password(email: str):
         email_to=user.email, email=email, token=password_reset_token
     )
     return {"msg": "Password recovery email sent"}
-'''
+
 
 @router.post("/reset-password/", response_model=schemas.Msg)
 def reset_password():
     pass
-    '''
+    
     token: str = Body(...),
     new_password: str = Body(...),
     db: Session = Depends(deps.get_db),
