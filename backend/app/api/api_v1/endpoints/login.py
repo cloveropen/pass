@@ -3,58 +3,44 @@ from typing import Any
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-#from sqlalchemy.orm import Session
 
-#from app import crud, models, schemas
 from app import schemas
-#from app.api import deps
-#from app.core import security
-#from app.core.config import settings
-#from app.core.security import get_password_hash
-#from app.utils import (
-#    generate_password_reset_token,
-#    #send_reset_password_email,
-#    verify_password_reset_token,
-#)
+from app.core import security
+from app.db import Kd99repository
+from app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from loguru import logger
 
 router = APIRouter()
 
 
 @router.post("/login/access-token", response_model=schemas.Token)
-def login_access_token():
-    print("进入 /login/access-token")
-    pass
-'''    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
-) -> Any:
-    """
-    OAuth2 compatible token login, get an access token for future requests
-    """
-    user = crud.user.authenticate(
-        db, email=form_data.username, password=form_data.password
-    )
-    if not user:
+async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
+    logger.info("开始进入login_access_token")
+    # OAuth2 compatible token login, get an access token for future requests
+    kd99rep = Kd99repository.Kd99rep()
+    tkd99 = await kd99rep.authenticate(opcode=form_data.username, password=form_data.password)
+
+    if not tkd99:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    elif not crud.user.is_active(user):
+    elif not kd99rep.is_active(tkd99):
         raise HTTPException(status_code=400, detail="Inactive user")
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
         "access_token": security.create_access_token(
-            user.id, expires_delta=access_token_expires
+            tkd99["opcode"], expires_delta=access_token_expires
         ),
         "token_type": "bearer",
     }
-'''
 
-@router.post("/login/test-token", response_model=schemas.User)
-def test_token():
-    pass
-'''    
-    current_user: models.User = Depends(deps.get_current_user)) -> Any:
-    """
-    Test access token
-    """
-    return current_user
-'''
+@router.post("/login/test-token", response_model=schemas.Kd99)
+async def test_token(token :str ) -> Any:
+    kd99rep = Kd99repository.Kd99rep()
+    logger.info("开始调用et_kd99_by_opcode")
+    tkd99 = await kd99rep.get_current_user(token)
+    # Test access token
+    return tkd99
+
+
 '''
 @router.post("/password-recovery/{email}", response_model=schemas.Msg)
 def recover_password(email: str):
