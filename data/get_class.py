@@ -1,7 +1,7 @@
 import asyncio
 
 import requests
-#import pandas as pd
+# import pandas as pd
 from bs4 import BeautifulSoup
 import re
 import motor.motor_asyncio
@@ -47,9 +47,11 @@ headers1 = {
 
 db_uri = "mongodb://drug:你的密码@ip:27017/drug"
 db_conn_args = {
-                    "zlibCompressionLevel": 7,
-                    "compressors": "zlib"
-                }
+    "zlibCompressionLevel": 7,
+    "compressors": "zlib"
+}
+
+
 # 获取网页数据
 def get_html(url: str, headers: dict) -> str:
     r = requests.get(url, headers1)
@@ -60,7 +62,7 @@ def get_html(url: str, headers: dict) -> str:
     return html
 
 
-# 解析一级药理分裂
+# 解析一级药理分类
 async def parse_class1(html: str):
     # dfs = pd.read_html(html,attrs={'class':'sidemenu'})
     # print(dfs[0])
@@ -88,6 +90,7 @@ async def parse_class1(html: str):
             document = {'code': tcode, 'cname': tname}
             result = await db.class1.insert_one(document)
             print('result %s' % repr(result.inserted_id))
+
 
 # 解析二级药理分类
 async def parse_class2(html: str):
@@ -122,7 +125,7 @@ async def parse_class2(html: str):
                 }
                 client = motor.motor_asyncio.AsyncIOMotorClient(db_uri, **db_conn_args)
                 db = client.get_database("drug")
-                document = {'code': tcode,'cname':tname}
+                document = {'code': tcode, 'cname': tname}
                 result = await db.class2.insert_one(document)
                 print('result %s' % repr(result.inserted_id))
 
@@ -139,4 +142,3 @@ async def main():
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
-
