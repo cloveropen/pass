@@ -45,7 +45,7 @@ headers1 = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36',
 }
 
-db_uri = "mongodb://drug:eastwillpass58@121.36.48.65:27017/drug"
+db_uri = "mongodb://drug:你的密码@ip:27017/drug"
 db_conn_args = {
                     "zlibCompressionLevel": 7,
                     "compressors": "zlib"
